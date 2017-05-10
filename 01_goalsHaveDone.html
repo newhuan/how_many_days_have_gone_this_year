@@ -26,7 +26,7 @@
 
 	let calculateGoalBtn = document.querySelector('#calculate-goal');
 	calculateGoalBtn.addEventListener('click', function () {
-        let totalGoal  = 40;
+        let totalGoal  = 50;
         let goalFormat = getGoalsFormat(parseInt(document.querySelector('#goal').value), totalGoal);
         let daysHaveGone = getDaysGoneUntilToday();
         let year = new Date().getFullYear();

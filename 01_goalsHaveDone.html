@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>目标完成度</title>
+	<style>
+		body{
+			padding-top: 200px;
+		}
+		.layout, .text{
+			width: 800px;
+			margin: 20px auto;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div class="layout">
+	<label>已完成:<input type="text" id="goal"></label>
+	<button id="calculate-goal">计划完成度</button>
+
+</div>
+<div class="text"></div>
+<script>
+
+
+	let calculateGoalBtn = document.querySelector('#calculate-goal');
+	calculateGoalBtn.addEventListener('click', function () {
+        let totalGoal  = 40;
+        let goalFormat = getGoalsFormat(parseInt(document.querySelector('#goal').value), totalGoal);
+        let daysHaveGone = getDaysGoneUntilToday();
+        let year = new Date().getFullYear();
+        let dayFormat = getDaysFormat(daysHaveGone, year);
+        showResult(dayFormat + goalFormat);
+
+
+    }, false);
+
+    function showResult(result) {
+        document.querySelector('.text').innerHTML = result;
+    }
+
+    function getDaysGoneUntilToday() {
+        let date = new Date();
+        let year = date.getFullYear();
+        return getDaysGone(year, date.getMonth() + 1, date.getDate());
+    }
+
+    function getDaysGone(year, month, day) {
+        let daysGone = 0;
+        let FebruaryDays = year % 4 === 0 && year % 100 != 0 || year % 400 === 0 ? 29 : 28;
+        switch (month) {
+            case 12:
+                daysGone += 30;
+            case 11:
+                daysGone += 31;
+            case 10:
+                daysGone += 30;
+            case 9:
+                daysGone += 31;
+            case 8:
+                daysGone += 31;
+            case 7:
+                daysGone += 30;
+            case 6:
+                daysGone += 31;
+            case 5:
+                daysGone += 30;
+            case 4:
+                daysGone += 31;
+            case 3:
+                daysGone += FebruaryDays;
+            case 2:
+                daysGone += 31;
+            case 1:
+                daysGone += day;
+        }
+        return daysGone;
+    }
+
+    function getDaysFormat(daysHaveGone, year) {
+        let totalDays = year % 4 === 0 && year % 100 != 0 || year % 400 === 0 ? 366 : 365;
+        let textFormat = "今年已经过去了goneDays天，只剩left天,今年已经过了percent%!";
+        textFormat = textFormat.replace("goneDays", daysHaveGone);
+        textFormat = textFormat.replace("left",  totalDays - daysHaveGone);
+        textFormat = textFormat.replace("percent", ((daysHaveGone/totalDays).toFixed(4)*100).toFixed(2));
+//        document.querySelector('.text').innerHTML = textFormat;
+	    return textFormat;
+    }
+
+    function getGoalsFormat(goal, total) {
+        goal = goal ? goal : 0;
+	    let text = "目标还差left本，还有percent%未完成!";
+	    let left = total - goal;
+	    text = text.replace("left", left);
+	    text = text.replace("percent", ((left / total) * 100).toFixed(2));
+	    return text;
+
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>还剩几天？</title>
+	<style>
+		.layout, .text{
+			width: 800px;
+			margin: 200px auto 0;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+<div class="layout">
+	<label>年:<input type="text" id="year"></label>
+	<label>月:<input type="text" id="month"></label>
+	<label>日:<input type="text" id="day"></label>
+	<button id="calculate">确定</button>
+	<button id="calculate-today">计算今天</button>
+</div>
+<div class="text"></div>
+<script>
+	let calculateTodayBtn = document.querySelector('#calculate-today');
+	calculateTodayBtn.addEventListener('click', function () {
+		let date = new Date();
+		let year = date.getFullYear();
+		let daysHaveGone = getDaysGone(year, date.getMonth() + 1, date.getDate());
+		showResult(daysHaveGone, year);
+		
+    }, false);
+	let calculateBtn = document.querySelector('#calculate');
+	calculateBtn.addEventListener('click', function () {
+		let year = parseInt(document.querySelector('#year').value);
+		let month = parseInt(document.querySelector('#month').value);
+		let day = parseInt(document.querySelector('#day').value);
+
+		let daysHaveGone = getDaysGone(year, month, day);
+		showResult(daysHaveGone, year);
+    },false);
+
+    function getDaysGone(year, month, day) {
+        let daysGone = 0;
+        let FebruaryDays = year % 4 === 0 && year % 100 != 0 || year % 400 === 0 ? 29 : 28;
+        switch (month) {
+            case 12:
+                daysGone += 30;
+            case 11:
+                daysGone += 31;
+            case 10:
+                daysGone += 30;
+            case 9:
+                daysGone += 31;
+            case 8:
+                daysGone += 31;
+            case 7:
+                daysGone += 30;
+            case 6:
+                daysGone += 31;
+            case 5:
+                daysGone += 30;
+            case 4:
+                daysGone += 31;
+            case 3:
+                daysGone += FebruaryDays;
+            case 2:
+                daysGone += 31;
+            case 1:
+                daysGone += day;
+        }
+        return daysGone;
+    }
+
+    function showResult(daysHaveGone, year) {
+        let totalDays = year % 4 === 0 && year % 100 != 0 || year % 400 === 0 ? 366 : 365;
+        let textFormat = "今年已经过去了goneDays天，只剩left天,今年已经过了percent%!";
+        textFormat = textFormat.replace("goneDays", daysHaveGone);
+        textFormat = textFormat.replace("left",  totalDays - daysHaveGone);
+        textFormat = textFormat.replace("percent", ((daysHaveGone/totalDays).toFixed(4)*100).toFixed(2));
+        document.querySelector('.text').innerHTML = textFormat;
+    }
+
+
+
+</script>
+</body>
+</html>
